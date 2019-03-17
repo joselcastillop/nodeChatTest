@@ -110,4 +110,23 @@ io.on('connection', (socket) => {
     socket.on('join', (data) => {
         socket.broadcast.emit('join', {username : socket.username})
     })
+
+    socket.on('make_admin', (data) => {
+		//broadcast the new message
+		user.exists(socket.username,
+					function (uid) {
+						user.makeAdmin(
+							socket.username,
+							function () {
+								socket.emit('new_message',{message: "Admin Set", username: "BOT", is_admin: true})
+							},
+							function () {
+								socket.emit('new_message',{message: "User Not Found", username: "BOT"})
+							});
+					},
+					function () {
+						socket.emit('new_message',{message: "User Not Found", username: "BOT"})
+					}
+				);
+    })
 })

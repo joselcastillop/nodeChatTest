@@ -34,3 +34,17 @@ exports.createUser = function (username, callback, notExistCallback) {
         callback();
     });
 }
+
+exports.makeAdmin = function (username, callback, notExistCallback) {
+    var md5 = crypto.createHash('md5').update(username).digest("hex");
+    let stmt = `UPDATE user SET is_admin = 1 WHERE username = ?;`;
+    let values = [username];
+    // execute the insert statment
+    connection.query(stmt, values, (err, results, fields) => {
+    if (err) {
+        notExistCallback();
+        return console.error(err.message);
+    }
+        callback();
+    });
+}

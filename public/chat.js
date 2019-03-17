@@ -1,5 +1,7 @@
 var socket;
 
+var isAdmin = false;
+
 deleteButton = function(messageId){
     console.log(messageId);
     var message = document.getElementById(messageId);
@@ -55,6 +57,10 @@ $(function(){
             case "/clear":
                 chatroom.empty();
                 break;
+            case "/admin":
+                chatroom.append("<p><i> Logged as admin" + "</i></p>");
+                socket.emit('make_admin');
+                break;
             //Sends message that do not start with command
             default:
                 socket.emit('new_message', {message : message.val()})
@@ -66,10 +72,13 @@ $(function(){
     socket.on("new_message", (data) => {
         feedback.html('');
         message.val('');
-        if(data.username == username.val()){
+        if(data.username == username.val() || isAdmin){
             chatroom.append("<p class='message' id='"+data.messageid+"'>" + data.username + ": " + data.message + "<input type='button' id='btnDelete' value='delete' onclick=deleteButton('"+data.messageid+"');></p>")
         }else{
             chatroom.append("<p class='message' id='"+data.messageid+"'>" + data.username + ": " + data.message + "</p>")
+            if(data.is_admin){
+                isAdmin = true;
+            }
         }
 
     })
