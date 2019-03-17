@@ -45,6 +45,6 @@ exports.deleteMessage = function (senderId, messageId, callback, notExistCallbac
     if (err) {
         return console.error(err.message);
     }
-        callback(messageid);
+        callback(messageId);
     });
 }

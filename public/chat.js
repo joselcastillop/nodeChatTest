@@ -1,6 +1,7 @@
+var socket;
 $(function(){
     //make connection
-    var socket = io.connect('http://localhost:3000')
+    socket = io.connect('http://localhost:3000')
 
     //buttons and inputs
     var message = $("#message")
@@ -82,5 +83,9 @@ $(function(){
     //Listen on typing
     socket.on('typing', (data) => {
         feedback.html("<p><i>" + data.username + " is typing a message..." + "</i></p>")
+    })
+    //Listen on typing
+    socket.on("join", (data) => {
+        chatroom.append("<p><i>" + data.username + " joined the chat" + "</i></p>")
     })
 });

@@ -10,7 +10,7 @@
     deleteButton = function(messageId){
         var message = document.getElementById(messageId);
         message.style.display = 'hidden';
-        var socket = io.connect('http://localhost:3000');
+        //var socket = io.connect('http://localhost:3000');
         socket.emit('delete_message',{mid : messageId});
     };
     </script>
