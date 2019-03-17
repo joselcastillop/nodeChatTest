@@ -1,4 +1,15 @@
 var socket;
+
+deleteButton = function(messageId){
+    console.log(messageId);
+    var message = document.getElementById(messageId);
+    console.log(message);
+    if(message != undefined && message.style.display != 'none'){
+        message.style.display = 'none';
+        socket.emit('delete_message',{mid : messageId});
+    }
+};
+
 $(function(){
     //make connection
     socket = io.connect('http://localhost:3000')
@@ -77,8 +88,12 @@ $(function(){
     socket.on('typing', (data) => {
         feedback.html("<p><i>" + data.username + " is typing a message..." + "</i></p>")
     })
-    //Listen on typing
+    //Listen to others join
     socket.on("join", (data) => {
         chatroom.append("<p><i>" + data.username + " joined the chat" + "</i></p>")
+    })
+    //Listen on delete_message
+    socket.on("delete_message", (data) => {
+        deleteButton(data.messageid);
     })
 });
