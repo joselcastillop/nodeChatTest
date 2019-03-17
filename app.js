@@ -30,7 +30,7 @@ io.on('connection', (socket) => {
 
     //listen on change_username
     socket.on('change_username', (data) => {
-		console.log("entrey "+data.username);
+
 		if (data.username == "") {
 			socket.emit('new_message',{message: "User Could Not Be Registered", username: "BOT"});
 		} else {
@@ -85,8 +85,7 @@ io.on('connection', (socket) => {
         //broadcast the new message
 		user.exists(socket.username,
 					function (uid, dbUsername) {
-                        console.log(data.mid);
-						message.deleteMessage(
+                        message.deleteMessage(
 							uid,
 							data.mid,
 							function (messageId) {
