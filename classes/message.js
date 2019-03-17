@@ -12,7 +12,6 @@ exports.retrieveHistory = function (username, callback, notExistCallback) {
         if (error) {
             return console.error(error.message);
         }
-        console.log(results[0]);
         if(results != undefined){
             callback(results);
         }else{
@@ -25,8 +24,6 @@ exports.insertMessage = function (senderId, message, callback, notExistCallback)
     var messageid = crypto.createHash('md5').update(message).digest("hex");
     var date = new Date();
     var timestamp = date.getTime();
-    console.log(senderId);
-    console.log(timestamp);
     let stmt = `INSERT INTO messages(messageid, message_body, message_timestamp, sender_id) VALUES (?, ?, ?, ?);`;
     let values = [messageid, message, timestamp, senderId];
 
@@ -35,6 +32,19 @@ exports.insertMessage = function (senderId, message, callback, notExistCallback)
     if (err) {
         return console.error(err.message);
     }
-        callback();
+        callback(messageid);
+    });
+}
+
+exports.deleteMessage = function (senderId, messageId, callback, notExistCallback) {
+    let stmt = `UPDATE messages SET deleted_by = ? WHERE messageid = ?;`;
+    let values = [senderId,messageId];
+
+    // execute the insert statment
+    connection.query(stmt, values, (err, results, fields) => {
+    if (err) {
+        return console.error(err.message);
+    }
+        callback(messageid);
     });
 }

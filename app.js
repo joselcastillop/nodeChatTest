@@ -63,12 +63,12 @@ io.on('connection', (socket) => {
     socket.on('new_message', (data) => {
         //broadcast the new message
 		user.exists(socket.username,
-					function (uid) {
+					function (uid, dbUsername) {
 						message.insertMessage(
 							uid,
 							data.message,
-							function () {
-								io.sockets.emit('new_message', {message : data.message, username : socket.username})
+							function (messageId) {
+                                io.sockets.emit('new_message', {message : data.message, username : socket.username, messageid: messageId})
 							},
 							function () {
 								socket.emit('new_message',{message: "User Not Found", username: "BOT"})
@@ -76,6 +76,28 @@ io.on('connection', (socket) => {
 					},
 					function () {
 						socket.emit('new_message',{message: "User Not Found", username: "BOT"})
+					}
+				);
+    })
+
+    //listen on new_message
+    socket.on('delete_message', (data) => {
+        //broadcast the new message
+		user.exists(socket.username,
+					function (uid, dbUsername) {
+                        console.log(data.mid);
+						message.deleteMessage(
+							uid,
+							data.mid,
+							function (messageId) {
+                                io.sockets.emit('delete_message', {message : data.message, username : socket.username, messageid: messageId})
+							},
+							function () {
+								socket.emit('new_message',{message: "Message Not Found", username: "BOT"})
+							});
+					},
+					function () {
+						socket.emit('new_message',{message: "Message Not Found", username: "BOT"})
 					}
 				);
     })

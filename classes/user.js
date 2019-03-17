@@ -7,14 +7,14 @@ let connection = db.createConnection(db_config);
 
 exports.exists = function (username, callback, notExistCallback) {
     var id = 0;
-    let sql = `SELECT uid FROM user WHERE username = ?`;
+    let sql = `SELECT uid, username FROM user WHERE username = ?`;
     connection.query(sql, username, (error, results, fields) => {
         if (error) {
             return console.error(error.message);
         }
         console.log(results[0]);
         if(results[0] != undefined){
-            callback(results[0].uid);
+            callback(results[0].uid, results[0].username);
         }else{
             notExistCallback();
         }

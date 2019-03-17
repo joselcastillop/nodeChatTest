@@ -10,6 +10,8 @@ $(function(){
     var chatroom = $("#chatroom")
     var feedback = $("#feedback")
 
+
+
     //Sends Messages through the socket
     send_message.click(function(){
         var str = message.val().split(" ");
@@ -52,7 +54,19 @@ $(function(){
     socket.on("new_message", (data) => {
         feedback.html('');
         message.val('');
-        chatroom.append("<p class='message'>" + data.username + ": " + data.message + "</p>")
+        if(data.username == username.val()){
+            chatroom.append("<div id='"+data.messageid+"'><p class='message'>" + data.username + ": " + data.message + "<input type='button' id='btnDelete' value='delete' onclick=deleteButton('"+data.messageid+"');></p></div>")
+        }else{
+            chatroom.append("<div id='"+data.messageid+"'><p class='message'>" + data.username + ": " + data.message + "</p></div>")
+        }
+
+    })
+
+    //Listen on new_message from user
+    socket.on("new_message_user", (data) => {
+        feedback.html('');
+        message.val('');
+        chatroom.append("<p class='message' id='"+data.messageid+"'>" + data.username + ": " + data.message + "</p><input type='button' id='btnDelete' value='delete' onclick='deleteButton("+data.messageid+")'>")
     })
 
     //Emit a username
