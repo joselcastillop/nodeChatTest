@@ -12,7 +12,6 @@ exports.exists = function (username, callback, notExistCallback) {
         if (error) {
             return console.error(error.message);
         }
-        console.log(results[0]);
         if(results[0] != undefined){
             callback(results[0].uid, results[0].username);
         }else{
