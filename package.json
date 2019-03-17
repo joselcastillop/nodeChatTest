@@ -1,0 +1,25 @@
+{
+  "name": "nodechattest",
+  "version": "1.0.0",
+  "description": "Simple Chat using Node.js and Mysql",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joselcastillop/nodeChatTest.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joselcastillop/nodeChatTest/issues"
+  },
+  "homepage": "https://github.com/joselcastillop/nodeChatTest#readme",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "nodemon": "^1.18.10",
+    "socket.io": "^2.2.0"
+  }
+}
