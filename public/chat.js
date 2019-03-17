@@ -56,18 +56,11 @@ $(function(){
         feedback.html('');
         message.val('');
         if(data.username == username.val()){
-            chatroom.append("<div id='"+data.messageid+"'><p class='message'>" + data.username + ": " + data.message + "<input type='button' id='btnDelete' value='delete' onclick=deleteButton('"+data.messageid+"');></p></div>")
+            chatroom.append("<p class='message' id='"+data.messageid+"'>" + data.username + ": " + data.message + "<input type='button' id='btnDelete' value='delete' onclick=deleteButton('"+data.messageid+"');></p>")
         }else{
-            chatroom.append("<div id='"+data.messageid+"'><p class='message'>" + data.username + ": " + data.message + "</p></div>")
+            chatroom.append("<p class='message' id='"+data.messageid+"'>" + data.username + ": " + data.message + "</p>")
         }
 
-    })
-
-    //Listen on new_message from user
-    socket.on("new_message_user", (data) => {
-        feedback.html('');
-        message.val('');
-        chatroom.append("<p class='message' id='"+data.messageid+"'>" + data.username + ": " + data.message + "</p><input type='button' id='btnDelete' value='delete' onclick='deleteButton("+data.messageid+")'>")
     })
 
     //Emit a username
