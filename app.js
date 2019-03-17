@@ -1,4 +1,5 @@
 const user = require("./classes/user.js");
+const message = require("./classes/message.js");
 const express = require('express');
 const app = express();
 
@@ -62,8 +63,16 @@ io.on('connection', (socket) => {
     socket.on('new_message', (data) => {
         //broadcast the new message
 		user.exists(socket.username,
-					function () {
-						io.sockets.emit('new_message', {message : data.message, username : socket.username})
+					function (uid) {
+						message.insertMessage(
+							uid,
+							data.message,
+							function () {
+								io.sockets.emit('new_message', {message : data.message, username : socket.username})
+							},
+							function () {
+								socket.emit('new_message',{message: "User Not Found", username: "BOT"})
+							});
 					},
 					function () {
 						socket.emit('new_message',{message: "User Not Found", username: "BOT"})
