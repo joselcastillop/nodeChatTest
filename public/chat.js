@@ -10,9 +10,36 @@ $(function(){
 	var chatroom = $("#chatroom")
 	var feedback = $("#feedback")
 
-	//Emit message
+    //Sends Messages through the socket
 	send_message.click(function(){
-		socket.emit('new_message', {message : message.val()})
+		var str = message.val().split(" ");
+		//based on the message implements the commands
+		switch(str[0]){
+            //Join command. Recreates connection
+			case "/join":
+				chatroom.append("<p><i> You joined the chat" + "</i></p>");
+				socket.connect('http://localhost:3000');
+				socket.emit('change_username', {username : username.val()});
+				socket.emit('join');
+				message.val('');
+				console.log('join sent');
+				break;
+            //Leave command. Destroys Connection
+			case "/leave":
+				chatroom.append("<p><i> You left the chat" + "</i></p>");
+				socket.emit('leave');
+				socket.disconnect();
+				message.val('');
+				break;
+            //Clear command. Clears screen
+			case "/clear":
+				chatroom.empty();
+				break;
+            //Sends message that do not start with command
+			default:
+				socket.emit('new_message', {message : message.val()})
+				break;
+		}
 	})
 
 	//Listen on new_message
