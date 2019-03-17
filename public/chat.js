@@ -11,7 +11,7 @@ $(function(){
 	var feedback = $("#feedback")
 
     //Sends Messages through the socket
-	send_message.click(function(){
+    send_message.click(function(){
 		var str = message.val().split(" ");
 		//based on the message implements the commands
 		switch(str[0]){
