@@ -12,35 +12,41 @@ $(function(){
 
     //Sends Messages through the socket
     send_message.click(function(){
-		var str = message.val().split(" ");
-		//based on the message implements the commands
-		switch(str[0]){
+        var str = message.val().split(" ");
+        //based on the message implements the commands
+        switch(str[0]){
             //Join command. Recreates connection
-			case "/join":
-				chatroom.append("<p><i> You joined the chat" + "</i></p>");
-				socket.connect('http://localhost:3000');
-				socket.emit('change_username', {username : username.val()});
-				socket.emit('join');
-				message.val('');
-				console.log('join sent');
-				break;
+            case "/join":
+                //clears chatroom window
+                chatroom.empty();
+                //Shows Joined chat to user
+                chatroom.append("<p><i> You joined the chat" + "</i></p>");
+                //connects to socket
+                socket.connect('http://localhost:3000');
+                //emits change_username command so that it logins and changes username on socket serverside
+                socket.emit('change_username', {username : username.val()});
+                //emits join so that other users see that user joined
+                socket.emit('join');
+                //resets the message field
+                message.val('');
+                break;
             //Leave command. Destroys Connection
-			case "/leave":
-				chatroom.append("<p><i> You left the chat" + "</i></p>");
-				socket.emit('leave');
-				socket.disconnect();
-				message.val('');
-				break;
+            case "/leave":
+                chatroom.append("<p><i> You left the chat" + "</i></p>");
+                socket.emit('leave');
+                socket.disconnect();
+                message.val('');
+                break;
             //Clear command. Clears screen
-			case "/clear":
-				chatroom.empty();
-				break;
+            case "/clear":
+                chatroom.empty();
+                break;
             //Sends message that do not start with command
-			default:
-				socket.emit('new_message', {message : message.val()})
-				break;
-		}
-	})
+            default:
+                socket.emit('new_message', {message : message.val()})
+                break;
+        }
+    })
 
 	//Listen on new_message
 	socket.on("new_message", (data) => {
