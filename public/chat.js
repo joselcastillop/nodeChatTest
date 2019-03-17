@@ -2,10 +2,9 @@ var socket;
 
 var isAdmin = false;
 
+//function to delete message from UI and send message to server to delete from DB
 deleteButton = function(messageId){
-    console.log(messageId);
     var message = document.getElementById(messageId);
-    console.log(message);
     if(message != undefined && message.style.display != 'none'){
         message.style.display = 'none';
         socket.emit('delete_message',{mid : messageId});
